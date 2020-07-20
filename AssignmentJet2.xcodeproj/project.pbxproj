@@ -17,6 +17,8 @@
 		1862507E24C5C93C000E642B /* GlobalMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1862507D24C5C93C000E642B /* GlobalMethod.swift */; };
 		1862508124C5CC4A000E642B /* SkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1862508024C5CC4A000E642B /* SkTableViewCell.swift */; };
 		1862508324C5D640000E642B /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 1862508224C5D640000E642B /* defaultImage.png */; };
+		1862508624C63448000E642B /* NetworkListner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1862508524C63448000E642B /* NetworkListner.swift */; };
+		39C1B61BC6520509F23DD2C8 /* Pods_AssignmentJet2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6E3DCF989D78DCB7622F63C /* Pods_AssignmentJet2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		1862507D24C5C93C000E642B /* GlobalMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalMethod.swift; sourceTree = "<group>"; };
 		1862508024C5CC4A000E642B /* SkTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkTableViewCell.swift; sourceTree = "<group>"; };
 		1862508224C5D640000E642B /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
+		1862508524C63448000E642B /* NetworkListner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkListner.swift; sourceTree = "<group>"; };
+		21A8163A3873977D08C5F16E /* Pods-AssignmentJet2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AssignmentJet2.release.xcconfig"; path = "Target Support Files/Pods-AssignmentJet2/Pods-AssignmentJet2.release.xcconfig"; sourceTree = "<group>"; };
+		DCABA12984DB6654CEF8422B /* Pods-AssignmentJet2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AssignmentJet2.debug.xcconfig"; path = "Target Support Files/Pods-AssignmentJet2/Pods-AssignmentJet2.debug.xcconfig"; sourceTree = "<group>"; };
+		E6E3DCF989D78DCB7622F63C /* Pods_AssignmentJet2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AssignmentJet2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39C1B61BC6520509F23DD2C8 /* Pods_AssignmentJet2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +57,8 @@
 			children = (
 				1862506524C5B620000E642B /* AssignmentJet2 */,
 				1862506424C5B620000E642B /* Products */,
+				C01857556ACF54E9ECA784B7 /* Pods */,
+				DBF0A1A7EE4CAD5D50013787 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				1862507D24C5C93C000E642B /* GlobalMethod.swift */,
+				1862508524C63448000E642B /* NetworkListner.swift */,
 			);
 			path = HelperClass;
 			sourceTree = "<group>";
@@ -95,6 +105,24 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		C01857556ACF54E9ECA784B7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DCABA12984DB6654CEF8422B /* Pods-AssignmentJet2.debug.xcconfig */,
+				21A8163A3873977D08C5F16E /* Pods-AssignmentJet2.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		DBF0A1A7EE4CAD5D50013787 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E6E3DCF989D78DCB7622F63C /* Pods_AssignmentJet2.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -102,6 +130,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1862507A24C5B62A000E642B /* Build configuration list for PBXNativeTarget "AssignmentJet2" */;
 			buildPhases = (
+				D7C5C4F86AB815EB520B4BD8 /* [CP] Check Pods Manifest.lock */,
 				1862505F24C5B620000E642B /* Sources */,
 				1862506024C5B620000E642B /* Frameworks */,
 				1862506124C5B620000E642B /* Resources */,
@@ -162,12 +191,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D7C5C4F86AB815EB520B4BD8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AssignmentJet2-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1862505F24C5B620000E642B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				1862507E24C5C93C000E642B /* GlobalMethod.swift in Sources */,
+				1862508624C63448000E642B /* NetworkListner.swift in Sources */,
 				1862506B24C5B620000E642B /* ViewController.swift in Sources */,
 				1862507124C5B620000E642B /* AssignmentJet2.xcdatamodeld in Sources */,
 				1862508124C5CC4A000E642B /* SkTableViewCell.swift in Sources */,
@@ -314,6 +369,7 @@
 		};
 		1862507B24C5B62A000E642B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCABA12984DB6654CEF8422B /* Pods-AssignmentJet2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -332,6 +388,7 @@
 		};
 		1862507C24C5B62A000E642B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 21A8163A3873977D08C5F16E /* Pods-AssignmentJet2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
