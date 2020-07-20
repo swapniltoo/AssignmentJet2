@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var arr : [[String:Any]] = [[:]]
+    var pagecount =  1
+    
+    fileprivate var activityIndicator: LoadMoreActivityIndicator!
 
     
     override func viewDidLoad() {
@@ -37,6 +40,20 @@ class ViewController: UIViewController {
             }
         }
 
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.tableFooterView = UIView()
+        activityIndicator = LoadMoreActivityIndicator(scrollView: tableView, spacingFromLastCell: 10, spacingFromLastCellWhenLoadMoreActionStart: 60)
+
+        
+        
     }
 }
 
@@ -86,17 +103,56 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
             let user = dir["user"] as! [[String : Any]]
             cell.title.text = (user[0])["name"] as? String ?? ""
             cell.usrDesg.text = (user[0])["designation"] as? String ?? ""
-            cell.byline.text = dir["content"] as? String
-            cell.published_date.text = "Comments"
+            cell.byline.text = dir["content"] as? String ?? ""
+            cell.published_date.text = ""
             cell.img.layer.cornerRadius = cell.img.frame.size.height/2
-
-            if let mediaTitle = ((dir["media"] as! [[String:Any]])[0])["title"] as? String
+            // check if the media obj
+            let dr = dir["media"] as? [[String:Any]]
+            if dr?.count ?? 0 > 0
             {
-                  cell.mediaTitle.text = mediaTitle
+                if let mediaTitle = (dr?[0])?["title"] as? String
+                {
+                      cell.mediaTitle.text = mediaTitle
+                }
+                else
+                {
+                      cell.mediaTitle.text = "No Title"
+                }
+                
+                
+                if let urlStr = ((dir["media"] as! [[String:Any]])[0])["url"] as? String
+                {
+                    cell.linkBtn.setTitle(urlStr, for:.normal)
+                }
+                else
+                {
+                    cell.linkBtn.setTitle("", for:.normal)
+                }
+                
+                if let urlStr = ((dir["media"] as! [[String:Any]])[0])["image"] as? String
+                {
+                    print(urlStr)
+                    cell.mediaImgHeight.constant = 250
+                    cell.mediaImg.downloaded(from: urlStr)
+                    cell.mediaImg.isHidden = false
+                    cell.mediaImg.image = #imageLiteral(resourceName: "defaultImage.png")
+                }
+                else
+                {
+                    cell.mediaImgHeight.constant = 0
+                    cell.mediaImg.isHidden = true
+                    cell.mediaImg.image = nil
+                }
+                
             }
             else
             {
-                  cell.mediaTitle.text = "No Title"
+                // remove the image and comments, title and ling if media obj not avl
+                cell.mediaTitle.text = ""
+                cell.linkBtn.setTitle("", for:.normal)
+                cell.mediaImgHeight.constant = 0
+                cell.mediaImg.isHidden = true
+                cell.mediaImg.image = nil
             }
             
             if let likesCntStr = dir["likes"] as? Double
@@ -134,30 +190,36 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
                   cell.commentCount.text = "1 min"
             }
 
-            if let urlStr = ((dir["media"] as! [[String:Any]])[0])["url"] as? String
-            {
-                cell.linkBtn.setTitle(urlStr, for:.normal)
-            }
-            else
-            {
-                cell.linkBtn.setTitle("No link", for:.normal)
-            }
-            
-            if let urlStr = ((dir["media"] as! [[String:Any]])[0])["image"] as? String
-            {
-                print(urlStr)
-                cell.mediaImgHeight.constant = 250
-                cell.mediaImg.downloaded(from: urlStr)
-                cell.mediaImg.isHidden = false
-                cell.mediaImg.image = #imageLiteral(resourceName: "defaultImage.png")
-            }
-            else
-            {
-                cell.mediaImg.isHidden = true
-                cell.mediaImg.image = nil
-            }
         }
         return cell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        activityIndicator.start {
+            self.pagecount += self.pagecount
+            
+            DispatchQueue.global(qos: .utility).async {
+                
+                GlobalMethod.sharedInstance.getViewData(page: self.pagecount) { (isResult, result) in
+                    print(result ?? "Error")
+                    DispatchQueue.main.async {
+                    let new_arr =  result as! [[String : Any]]
+                        self.arr.append(contentsOf: new_arr)
+                    self.tableView.reloadData()
+                        //  stop activity indicator
+                        for i in 0..<3 {
+                            print("!!!!!!!!! \(i)")
+                            sleep(1)
+                        }
+                        DispatchQueue.main.async { [weak self] in
+                            self?.activityIndicator.stop()
+                        }
+
+                    }
+                }
+                
+            }
+        }
     }
 }
 
