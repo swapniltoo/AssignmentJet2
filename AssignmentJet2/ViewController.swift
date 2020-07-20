@@ -29,17 +29,27 @@ class ViewController: UIViewController {
         myActivityIndicator.startAnimating()
         view.addSubview(myActivityIndicator)
 
-        GlobalMethod.sharedInstance.getViewData() { (isResult, result) in
-            print(result ?? "Error")
-            DispatchQueue.main.async {
-            self.arr = result as! [[String : Any]]
-            self.tableView.reloadData()
-                //  stop activity indicator
-                myActivityIndicator.stopAnimating()
-                myActivityIndicator.removeFromSuperview()
+        let network = NetworkListner.shared
+        
+        network.reachability.whenReachable = { reachability in
+            
+            GlobalMethod.sharedInstance.getViewData() { (isResult, result) in
+                print(result ?? "Error")
+                DispatchQueue.main.async {
+                self.arr = result as? [[String : Any]] ?? []
+                self.tableView.reloadData()
+                    //  stop activity indicator
+                    myActivityIndicator.stopAnimating()
+                    myActivityIndicator.removeFromSuperview()
+                }
             }
+            
         }
 
+        
+
+        
+        // Setting Table view for pagging by adding lodder at bottom
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -52,9 +62,26 @@ class ViewController: UIViewController {
         tableView.tableFooterView = UIView()
         activityIndicator = LoadMoreActivityIndicator(scrollView: tableView, spacingFromLastCell: 10, spacingFromLastCellWhenLoadMoreActionStart: 60)
 
-        
-        
+        // adding notification for network issue
+        NotificationCenter.default.addObserver(self, selector: #selector(networkIssues), name: NSNotification.Name(rawValue: "networkIssue"), object: nil)
     }
+    
+
+  @objc  func networkIssues(notification : NSNotification){
+        //do here code
+    print(notification.object ?? "") //myObject
+    print(notification.userInfo ?? "") //[AnyHashable("key"): "Value"]
+    print(notification.userInfo?["flag"] ?? "no network triggred ")
+    
+    }
+
+
+    override func viewWillDisappear(_ animated: Bool) {
+        // Remove the network notification observer
+        NotificationCenter.default.removeObserver(self, name: UIDevice.batteryLevelDidChangeNotification, object: nil)
+    }
+
+    
 }
 
 
@@ -203,7 +230,7 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
                 GlobalMethod.sharedInstance.getViewData(page: self.pagecount) { (isResult, result) in
                     print(result ?? "Error")
                     DispatchQueue.main.async {
-                    let new_arr =  result as! [[String : Any]]
+                    let new_arr =  result as? [[String : Any]] ?? []
                         self.arr.append(contentsOf: new_arr)
                     self.tableView.reloadData()
                         //  stop activity indicator

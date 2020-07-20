@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Reachability
 
 class NetworkListner : NSObject {
 
@@ -54,6 +55,8 @@ func startNWListner() {
         print("Reachable via Cellular")
     case .unavailable:
         print("Network not reachable")
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "networkIssue") , object: "myObject", userInfo: ["flag": "network unavailable"])
+
     case .none:
         print("Network none")
     }
