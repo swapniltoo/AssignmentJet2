@@ -38,13 +38,35 @@ class ViewController: UIViewController {
         }
 
     }
-
-
 }
 
 
 extension ViewController : UITableViewDelegate,UITableViewDataSource
 {
+    
+    func getDateFromString(dateStr: String) -> (date: Date?,conversion: Bool)
+    {
+        let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+        let dateComponentArray = dateStr.components(separatedBy: "/")
+
+        if dateComponentArray.count == 3 {
+            var components = DateComponents()
+            components.year = Int(dateComponentArray[2])
+            components.month = Int(dateComponentArray[1])
+            components.day = Int(dateComponentArray[0])
+            components.timeZone = TimeZone(abbreviation: "GMT+0:00")
+            guard let date = calendar.date(from: components) else {
+                return (nil , false)
+            }
+
+            return (date,true)
+        } else {
+            return (nil,false)
+        }
+
+    }
+    
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if arr.count > 1
@@ -63,13 +85,69 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
             cell.cellData = dir
             let user = dir["user"] as! [[String : Any]]
             cell.title.text = (user[0])["name"] as? String ?? ""
+            cell.usrDesg.text = (user[0])["designation"] as? String ?? ""
             cell.byline.text = dir["content"] as? String
             cell.published_date.text = "Comments"
             cell.img.layer.cornerRadius = cell.img.frame.size.height/2
+
+            if let mediaTitle = ((dir["media"] as! [[String:Any]])[0])["title"] as? String
+            {
+                  cell.mediaTitle.text = mediaTitle
+            }
+            else
+            {
+                  cell.mediaTitle.text = "No Title"
+            }
+            
+            if let likesCntStr = dir["likes"] as? Double
+            {
+                cell.likeCount.text = "\(likesCntStr.shortStringRepresentation) Likes"
+            }
+            else
+            {
+                  cell.mediaTitle.text = "0 Likes"
+            }
+
+            if let commentsCntStr = dir["comments"] as? Double
+            {
+                cell.commentCount.text = "\(commentsCntStr.shortStringRepresentation) Comments"
+            }
+            else
+            {
+                  cell.commentCount.text = "0 Comments"
+            }
+
+            if let dateTime = dir["createdAt"] as? String
+            {
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+                dateFormatter.timeZone = TimeZone.autoupdatingCurrent
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                let dataDate = dateFormatter.date(from: dateTime)!
+                let dt = Date()
+                cell.timeLbl.text = dt.timeIntervalSince(dataDate).stringFromTimeInterval()
+                
+                
+            }
+            else
+            {
+                  cell.commentCount.text = "1 min"
+            }
+
+            if let urlStr = ((dir["media"] as! [[String:Any]])[0])["url"] as? String
+            {
+                cell.linkBtn.setTitle(urlStr, for:.normal)
+            }
+            else
+            {
+                cell.linkBtn.setTitle("No link", for:.normal)
+            }
             
             if let urlStr = ((dir["media"] as! [[String:Any]])[0])["image"] as? String
             {
                 print(urlStr)
+                cell.mediaImgHeight.constant = 250
+                cell.mediaImg.downloaded(from: urlStr)
                 cell.mediaImg.isHidden = false
                 cell.mediaImg.image = #imageLiteral(resourceName: "defaultImage.png")
             }
@@ -82,6 +160,5 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
         return cell
     }
 }
-
 
 

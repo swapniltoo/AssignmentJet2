@@ -65,11 +65,10 @@
 			isa = PBXGroup;
 			children = (
 				1862508224C5D640000E642B /* defaultImage.png */,
-				1862507F24C5CC35000E642B /* New Group */,
-				1862508024C5CC4A000E642B /* SkTableViewCell.swift */,
+				1862507F24C5CC35000E642B /* HelperClass */,
+				1862508424C6188A000E642B /* Cell */,
 				1862506624C5B620000E642B /* AppDelegate.swift */,
 				1862506824C5B620000E642B /* SceneDelegate.swift */,
-				1862507D24C5C93C000E642B /* GlobalMethod.swift */,
 				1862506A24C5B620000E642B /* ViewController.swift */,
 				1862506C24C5B620000E642B /* Main.storyboard */,
 				1862507224C5B62A000E642B /* Assets.xcassets */,
@@ -80,11 +79,20 @@
 			path = AssignmentJet2;
 			sourceTree = "<group>";
 		};
-		1862507F24C5CC35000E642B /* New Group */ = {
+		1862507F24C5CC35000E642B /* HelperClass */ = {
 			isa = PBXGroup;
 			children = (
+				1862507D24C5C93C000E642B /* GlobalMethod.swift */,
 			);
-			path = "New Group";
+			path = HelperClass;
+			sourceTree = "<group>";
+		};
+		1862508424C6188A000E642B /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1862508024C5CC4A000E642B /* SkTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
