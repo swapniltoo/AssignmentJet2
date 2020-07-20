@@ -128,12 +128,23 @@ extension ViewController : UITableViewDelegate,UITableViewDataSource
             let dir = arr[indexPath.row]
             cell.cellData = dir
             let user = dir["user"] as! [[String : Any]]
+            
             cell.title.text = (user[0])["name"] as? String ?? ""
             cell.usrDesg.text = (user[0])["designation"] as? String ?? ""
             cell.byline.text = dir["content"] as? String ?? ""
             cell.published_date.text = ""
             cell.img.layer.cornerRadius = cell.img.frame.size.height/2
             // check if the media obj
+            
+            if let urlStr = (user[0])["avatar"] as? String
+              {
+                  cell.img.downloaded(from: urlStr)
+              }
+              else
+              {
+                cell.img.image = UIImage(systemName: "person.circle")
+              }
+            
             let dr = dir["media"] as? [[String:Any]]
             if dr?.count ?? 0 > 0
             {
