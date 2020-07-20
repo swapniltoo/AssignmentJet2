@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import CoreData
+
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    
+
+    var personData: [NSManagedObject] = []
+
     var arr : [[String:Any]] = [[:]]
     var pagecount =  1
     
@@ -36,7 +40,13 @@ class ViewController: UIViewController {
             GlobalMethod.sharedInstance.getViewData() { (isResult, result) in
                 print(result ?? "Error")
                 DispatchQueue.main.async {
-                self.arr = result as? [[String : Any]] ?? []
+                    self.arr = result as? [[String : Any]] ?? [[:]]
+                    
+                    for obj in self.arr
+                    {
+                        GlobalMethod.sharedInstance.save(obj: obj)
+                    }
+                    
                 self.tableView.reloadData()
                     //  stop activity indicator
                     myActivityIndicator.stopAnimating()
@@ -64,14 +74,103 @@ class ViewController: UIViewController {
 
         // adding notification for network issue
         NotificationCenter.default.addObserver(self, selector: #selector(networkIssues), name: NSNotification.Name(rawValue: "networkIssue"), object: nil)
+        
+        
+
     }
     
+    
+    // Fetching from Core Data
+
+    func getDataForOffline()  {
+        
+        //1
+        guard let appDelegate =
+          UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext =
+          appDelegate.persistentContainer.viewContext
+        
+        //2
+        let fetchRequest =
+          NSFetchRequest<NSManagedObject>(entityName: "CellData")
+        
+        //3
+        do {
+          personData = try managedContext.fetch(fetchRequest)
+            for i in 0...personData.count-1
+            {
+                let celldata = personData[i]
+                var flag = false
+                if self.arr.count > 1
+                {
+                    // append database objects in array
+                    print(celldata)
+                    
+                    let containsEntry = self.arr.contains{ $0["id"] as? String == celldata.value(forKey: "cid") as? String }
+                    
+                    flag = containsEntry
+                    
+                }
+                else
+                {
+                    // As there are no object , no check requried in array
+                    if i == 0
+                    {
+                        arr = []
+                    }
+                }
+                
+                if flag {
+                    print("array has this object ")
+                    
+                } else {
+                    // Insert object as ther object is not in array
+                    print("array has do not this object ")
+                    var objToAppendToArr =  [String:Any]()
+                    objToAppendToArr["id"] = celldata.value(forKey: "cid") as! String
+                    objToAppendToArr["createdAt"] = celldata.value(forKey: "createdAt") as! String
+                    objToAppendToArr["content"] = celldata.value(forKey: "content") as! String
+                    objToAppendToArr["comments"] = celldata.value(forKey: "comments") as! Double
+                    objToAppendToArr["likes"] = celldata.value(forKey: "likes") as! Double
+                    let mediaString = celldata.value(forKey: "media") as! String
+                    objToAppendToArr["media"] = [convertToDictionary(text: mediaString)] // as data from backend is [[:]]
+                    let userString = celldata.value(forKey: "user") as! String
+                    objToAppendToArr["user"] = [convertToDictionary(text: userString)] // as data from backend is [[:]]
+                    
+                    self.arr.append(objToAppendToArr)
+                }
+                self.tableView.reloadData()
+            }
+            
+        } catch let error as NSError {
+          print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
+    
+    
+    func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+
+
 
   @objc  func networkIssues(notification : NSNotification){
         //do here code
     print(notification.object ?? "") //myObject
     print(notification.userInfo ?? "") //[AnyHashable("key"): "Value"]
     print(notification.userInfo?["flag"] ?? "no network triggred ")
+    
+    self.getDataForOffline()
     
     }
 
@@ -81,6 +180,7 @@ class ViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIDevice.batteryLevelDidChangeNotification, object: nil)
     }
 
+    
     
 }
 

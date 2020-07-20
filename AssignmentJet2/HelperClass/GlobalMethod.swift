@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 
 private let SharedInstance = GlobalMethod()
@@ -21,6 +22,9 @@ enum Endpoint : String {
 class GlobalMethod: NSObject {
 
     public let BaseApiPath:String = "https://5e99a9b1bc561b0016af3540.mockapi.io"
+    
+    var personData: [NSManagedObject] = []
+
     
 //    var requestManager = AFHTTPSessionManager()
     
@@ -53,6 +57,72 @@ class GlobalMethod: NSObject {
            }.resume()
         }
     }
+    
+    
+    
+    /// Working on core data // Saving to Core Data
+    
+    func save(obj : [String : Any]) {
+      
+      guard let appDelegate =
+        UIApplication.shared.delegate as? AppDelegate else {
+        return
+      }
+      
+      // 1
+      let managedContext =
+        appDelegate.persistentContainer.viewContext
+      
+      // 2
+      let entity =
+        NSEntityDescription.entity(forEntityName: "CellData",
+                                   in: managedContext)!
+      
+      let person = NSManagedObject(entity: entity,
+                                   insertInto: managedContext)
+      
+      // 3
+      person.setValue(obj["id"], forKeyPath: "cid")
+      person.setValue(obj["createdAt"], forKeyPath: "createdAt")
+      person.setValue(obj["content"], forKeyPath: "content")
+        person.setValue(obj["comments"], forKeyPath: "comments")
+        person.setValue(obj["likes"], forKeyPath: "likes")
+        
+        let dr = obj["media"] as? [[String:Any]]
+        if dr?.count ?? 0 > 0
+        {
+            let mediaObj = dr?[0] ?? [:]
+            person.setValue(mediaObj.jsonStringRepresentation , forKeyPath: "media")
+        }
+        else
+        {
+            let mediaObj =  [String:Any]()
+            person.setValue(mediaObj.jsonStringRepresentation , forKeyPath: "media")
+        }
+        
+        let ur = obj["user"] as? [[String:Any]]
+        if ur?.count ?? 0 > 0
+        {
+            let userObj = ur?[0] ?? [:]
+            person.setValue(userObj.jsonStringRepresentation , forKeyPath: "user")
+        }
+        else
+        {
+            let userObj =  [String:Any]()
+            person.setValue(userObj.jsonStringRepresentation , forKeyPath: "user")
+        }
+        
+
+
+      // 4
+      do {
+        try managedContext.save()
+        personData.append(person)
+      } catch let error as NSError {
+        print("Could not save. \(error), \(error.userInfo)")
+      }
+    }
+    
 }
 
 
@@ -270,5 +340,17 @@ class LoadMoreActivityIndicator {
             completion?()
         }
         activityIndicatorView.stopAnimating()
+    }
+}
+
+
+extension Dictionary {
+    var jsonStringRepresentation: String? {
+        guard let theJSONData = try? JSONSerialization.data(withJSONObject: self,
+                                                            options: [.prettyPrinted]) else {
+            return nil
+        }
+
+        return String(data: theJSONData, encoding: .ascii)
     }
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,7 @@
 		1862508124C5CC4A000E642B /* SkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1862508024C5CC4A000E642B /* SkTableViewCell.swift */; };
 		1862508324C5D640000E642B /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 1862508224C5D640000E642B /* defaultImage.png */; };
 		1862508624C63448000E642B /* NetworkListner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1862508524C63448000E642B /* NetworkListner.swift */; };
+		1862508A24C64700000E642B /* download.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 1862508924C64700000E642B /* download.jpeg */; };
 		39C1B61BC6520509F23DD2C8 /* Pods_AssignmentJet2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6E3DCF989D78DCB7622F63C /* Pods_AssignmentJet2.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,7 @@
 		1862508024C5CC4A000E642B /* SkTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkTableViewCell.swift; sourceTree = "<group>"; };
 		1862508224C5D640000E642B /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 		1862508524C63448000E642B /* NetworkListner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkListner.swift; sourceTree = "<group>"; };
+		1862508924C64700000E642B /* download.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = download.jpeg; sourceTree = "<group>"; };
 		21A8163A3873977D08C5F16E /* Pods-AssignmentJet2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AssignmentJet2.release.xcconfig"; path = "Target Support Files/Pods-AssignmentJet2/Pods-AssignmentJet2.release.xcconfig"; sourceTree = "<group>"; };
 		DCABA12984DB6654CEF8422B /* Pods-AssignmentJet2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AssignmentJet2.debug.xcconfig"; path = "Target Support Files/Pods-AssignmentJet2/Pods-AssignmentJet2.debug.xcconfig"; sourceTree = "<group>"; };
 		E6E3DCF989D78DCB7622F63C /* Pods_AssignmentJet2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AssignmentJet2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				1862508224C5D640000E642B /* defaultImage.png */,
+				1862508924C64700000E642B /* download.jpeg */,
 				1862507F24C5CC35000E642B /* HelperClass */,
 				1862508424C6188A000E642B /* Cell */,
 				1862506624C5B620000E642B /* AppDelegate.swift */,
@@ -111,7 +114,6 @@
 				DCABA12984DB6654CEF8422B /* Pods-AssignmentJet2.debug.xcconfig */,
 				21A8163A3873977D08C5F16E /* Pods-AssignmentJet2.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -187,6 +189,7 @@
 				1862507324C5B62A000E642B /* Assets.xcassets in Resources */,
 				1862506E24C5B620000E642B /* Main.storyboard in Resources */,
 				1862508324C5D640000E642B /* defaultImage.png in Resources */,
+				1862508A24C64700000E642B /* download.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
